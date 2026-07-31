@@ -72,7 +72,7 @@
         <select id="select-navigation-tab" onchange="switchTab(this.value)" class="w-full text-xs font-semibold bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white cursor-pointer shadow-sm">
           <option value="dashboard">📊 Dashboard Rekap Mingguan</option>
           <option value="presensi">📝 Form Presensi Murid</option>
-          <option value="biodata">🧑‍🎓 Biodata Murid & Data Orang Tua</option>
+          <option value="biodata">👨‍👩‍👧‍👦 Biodata Murid & Data Orang Tua</option>
           <option value="sheets">📋 Tabel Live Spreadsheet</option>
         </select>
       </div>
@@ -81,16 +81,37 @@
     <section id="content-dashboard" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div>
-          <h2 class="text-base font-semibold text-slate-800">Laporan Rekap Mingguan</h2>
-          <p class="text-xs text-slate-500">Periode: <span class="font-medium text-slate-700" id="periode-label">Hari Ini</span></p>
+          <h2 class="text-base font-semibold text-slate-800">Laporan Rekap Dasbor</h2>
+          <p class="text-xs text-slate-500">Filter data presensi berdasarkan parameter berikut:</p>
         </div>
-        <div class="flex items-center gap-2 w-full sm:w-auto">
-          <select id="filter-kelas" onchange="updateDashboard()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
-            <option value="semua">Semua Kelas</option>
-          </select>
-          <button onclick="fetchLiveDataFromSpreadsheet(true)" class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-1">
-            <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> Sync Spreadsheet
-          </button>
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          
+          <!-- Filter Tanggal Mulai -->
+          <div class="flex flex-col w-full sm:w-auto">
+            <span class="text-[10px] text-slate-500 font-semibold mb-1 ml-1 uppercase tracking-wider">Tanggal Mulai</span>
+            <input type="date" id="filter-mulai" onchange="updateDashboard()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto" title="Tanggal Mulai">
+          </div>
+          
+          <!-- Filter Tanggal Akhir -->
+          <div class="flex flex-col w-full sm:w-auto">
+             <span class="text-[10px] text-slate-500 font-semibold mb-1 ml-1 uppercase tracking-wider">Tanggal Akhir</span>
+             <input type="date" id="filter-akhir" onchange="updateDashboard()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto" title="Tanggal Akhir">
+          </div>
+
+          <!-- Filter Kelas -->
+          <div class="flex flex-col w-full sm:w-auto">
+             <span class="text-[10px] text-slate-500 font-semibold mb-1 ml-1 uppercase tracking-wider">Kelas</span>
+             <select id="filter-kelas" onchange="updateDashboard()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
+               <option value="semua">Semua Kelas</option>
+             </select>
+          </div>
+          
+          <!-- Tombol Sync (Disesuaikan posisinya agar sejajar dengan input form di atasnya) -->
+          <div class="flex flex-col w-full sm:w-auto justify-end sm:mt-5">
+             <button onclick="fetchLiveDataFromSpreadsheet(true)" class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 w-full sm:w-auto h-full">
+               <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> Sync Data
+             </button>
+          </div>
         </div>
       </div>
 
@@ -914,9 +935,27 @@
 
     function updateDashboard() {
       const filterDashboard = document.getElementById('filter-kelas').value;
-      const dataToProcess = filterDashboard === 'semua' 
+      const tanggalMulai = document.getElementById('filter-mulai').value;
+      const tanggalAkhir = document.getElementById('filter-akhir').value;
+
+      // 1. Filter berdasarkan kelas
+      let dataToProcess = filterDashboard === 'semua' 
                             ? presensiData 
                             : presensiData.filter(d => d.kelas === filterDashboard);
+
+      // 2. Filter berdasarkan rentang tanggal
+      if (tanggalMulai || tanggalAkhir) {
+        dataToProcess = dataToProcess.filter(d => {
+          // Asumsi format timestamp "YYYY-MM-DD HH:MM:00"
+          const recordDate = d.timestamp.split(' ')[0]; 
+          
+          let isValid = true;
+          if (tanggalMulai && recordDate < tanggalMulai) isValid = false;
+          if (tanggalAkhir && recordDate > tanggalAkhir) isValid = false;
+          
+          return isValid;
+        });
+      }
 
       let h=0, i=0, s=0, a=0;
       dataToProcess.forEach(d => {
