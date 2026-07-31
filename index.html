@@ -14,11 +14,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
-  <!-- Header Navbar -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
@@ -49,7 +63,6 @@
   <!-- Container Utama -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
     
-    <!-- Tab Navigation -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 mb-6 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
       <label for="select-navigation-tab" class="text-xs font-semibold text-slate-600 flex items-center gap-2">
         <i class="fa-solid fa-bars-staggered text-blue-600"></i>
@@ -59,13 +72,12 @@
         <select id="select-navigation-tab" onchange="switchTab(this.value)" class="w-full text-xs font-semibold bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white cursor-pointer shadow-sm">
           <option value="dashboard">📊 Dashboard Rekap Mingguan</option>
           <option value="presensi">📝 Form Presensi Murid</option>
-          <option value="biodata">👤 Biodata Murid & Data Orang Tua</option>
-          <option value="sheets">🗂️ Tabel Live Spreadsheet</option>
+          <option value="biodata">🧑‍🎓 Biodata Murid & Data Orang Tua</option>
+          <option value="sheets">📋 Tabel Live Spreadsheet</option>
         </select>
       </div>
     </div>
 
-    <!-- TAB CONTENT 1: DASHBOARD -->
     <section id="content-dashboard" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div>
@@ -75,9 +87,6 @@
         <div class="flex items-center gap-2 w-full sm:w-auto">
           <select id="filter-kelas" onchange="updateDashboard()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
             <option value="semua">Semua Kelas</option>
-            <option value="XII IPA 1">XII IPA 1</option>
-            <option value="XII IPA 2">XII IPA 2</option>
-            <option value="XII IPS 1">XII IPS 1</option>
           </select>
           <button onclick="fetchLiveDataFromSpreadsheet(true)" class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-1">
             <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> Sync Spreadsheet
@@ -86,7 +95,7 @@
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <!-- Metric Cards -->
+        <!-- Hadir -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
           <div class="absolute top-0 right-0 w-2 h-full bg-emerald-500"></div>
           <div class="flex justify-between items-start">
@@ -100,7 +109,7 @@
           </div>
           <p class="text-xs text-emerald-600 mt-3 flex items-center gap-1"><i class="fa-solid fa-arrow-up"></i> <span id="percent-hadir">0%</span></p>
         </div>
-
+        <!-- Izin -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
           <div class="absolute top-0 right-0 w-2 h-full bg-amber-500"></div>
           <div class="flex justify-between items-start">
@@ -114,7 +123,7 @@
           </div>
           <p class="text-xs text-amber-600 mt-3 flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> <span id="percent-izin">0%</span></p>
         </div>
-
+        <!-- Sakit -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
           <div class="absolute top-0 right-0 w-2 h-full bg-sky-500"></div>
           <div class="flex justify-between items-start">
@@ -128,7 +137,7 @@
           </div>
           <p class="text-xs text-sky-600 mt-3 flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> <span id="percent-sakit">0%</span></p>
         </div>
-
+        <!-- Alpa -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
           <div class="absolute top-0 right-0 w-2 h-full bg-rose-500"></div>
           <div class="flex justify-between items-start">
@@ -178,7 +187,6 @@
       </div>
     </section>
 
-    <!-- TAB CONTENT 2: FORM PRESENSI -->
     <section id="content-presensi" class="hidden space-y-6 max-w-3xl mx-auto">
       <div class="bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8">
         <div class="text-center mb-6">
@@ -211,9 +219,6 @@
               <label class="block text-xs font-medium text-slate-700 mb-1">Pilih Kelas</label>
               <select id="input-kelas" onchange="onKelasChanged()" required class="w-full text-xs border border-slate-300 rounded-lg p-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 font-semibold text-blue-700">
                 <option value="">-- Pilih Kelas --</option>
-                <option value="XII IPA 1">XII IPA 1</option>
-                <option value="XII IPA 2">XII IPA 2</option>
-                <option value="XII IPS 1">XII IPS 1</option>
               </select>
             </div>
           </div>
@@ -243,13 +248,74 @@
       </div>
     </section>
 
-    <!-- TAB CONTENT 3 & 4 (Biodata & Sheets) remain conceptually identical but functionally updated below -->
     <section id="content-biodata" class="hidden space-y-6">
-       <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 text-center py-10">
-           <i class="fa-solid fa-address-card text-4xl text-slate-300 mb-3"></i>
-           <h3 class="font-bold text-slate-700">Biodata Siswa</h3>
-           <p class="text-xs text-slate-500">Fitur biodata berjalan normal sesuai kode asli Anda.</p>
-       </div>
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 sm:p-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4 mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm">
+              <i class="fa-solid fa-address-card text-lg"></i>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-slate-800">Direktori Biodata Murid</h2>
+              <p class="text-xs text-slate-500">Pilih kelas untuk melihat detail biodata murid dan orang tua.</p>
+            </div>
+          </div>
+          
+          <div class="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-3">
+             <div class="relative w-full sm:w-64">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <i class="fa-solid fa-filter text-slate-400 text-xs"></i>
+                </div>
+                <select id="filter-biodata-kelas" onchange="renderBiodataList()" class="w-full text-sm font-semibold border border-slate-300 rounded-lg pl-9 pr-4 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-indigo-800">
+                  <option value="">-- Pilih Kelas --</option>
+                  <!-- Opsi akan diisi oleh JS -->
+                </select>
+             </div>
+             <button onclick="fetchLiveDataFromSpreadsheet(true)" class="bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center w-full sm:w-auto gap-2">
+                <i class="fa-solid fa-sync-alt" id="refresh-biodata-icon"></i>
+                <span>Muat Ulang</span>
+             </button>
+          </div>
+        </div>
+
+        <div id="biodata-empty-state" class="text-center py-16 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50">
+           <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+               <i class="fa-regular fa-id-badge text-4xl text-slate-400"></i>
+           </div>
+           <h3 class="text-sm font-bold text-slate-700 mb-1">Belum Ada Kelas Terpilih</h3>
+           <p class="text-xs text-slate-500">Silakan pilih kelas melalui filter di atas untuk menampilkan daftar biodata.</p>
+        </div>
+
+        <div id="biodata-loading" class="hidden text-center py-16">
+           <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-500 mb-3"></i>
+           <p class="text-sm text-slate-600 font-medium">Memuat data murid...</p>
+        </div>
+
+        <div id="biodata-list-container" class="hidden">
+           <div class="flex justify-between items-center mb-4">
+              <span class="text-sm font-medium text-slate-600">Menampilkan <strong id="biodata-count" class="text-indigo-700">0</strong> murid untuk kelas <strong id="biodata-kelas-label" class="text-slate-800"></strong></span>
+              <div class="relative w-48 hidden sm:block">
+                  <input type="text" id="search-biodata" placeholder="Cari nama..." onkeyup="filterBiodataCards()" class="w-full text-xs border border-slate-300 rounded-lg pl-8 pr-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <i class="fa-solid fa-search absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+              </div>
+           </div>
+           
+           <div class="sm:hidden mb-4 relative w-full">
+               <input type="text" id="search-biodata-mobile" placeholder="Cari nama murid..." onkeyup="filterBiodataCards('search-biodata-mobile')" class="w-full text-sm border border-slate-300 rounded-lg pl-9 pr-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm">
+               <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400"></i>
+           </div>
+
+           <!-- Grid Kartu Biodata -->
+           <div id="biodata-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Kartu akan dirender oleh JS -->
+           </div>
+           
+           <div id="no-search-results" class="hidden text-center py-10 bg-slate-50 rounded-xl mt-4 border border-slate-200">
+               <i class="fa-solid fa-search-minus text-2xl text-slate-400 mb-2"></i>
+               <p class="text-sm text-slate-600">Tidak ada murid yang cocok dengan pencarian.</p>
+           </div>
+        </div>
+      </div>
     </section>
 
     <section id="content-sheets" class="hidden space-y-4">
@@ -264,9 +330,6 @@
           <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
             <select id="filter-sheet-kelas" onchange="renderSpreadsheetTable()" class="text-xs border border-slate-300 rounded-lg px-3 py-1.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full sm:w-auto flex-grow font-medium">
               <option value="semua">Semua Kelas</option>
-              <option value="XII IPA 1">XII IPA 1</option>
-              <option value="XII IPA 2">XII IPA 2</option>
-              <option value="XII IPS 1">XII IPS 1</option>
             </select>
             <button onclick="fetchLiveDataFromSpreadsheet(true)" class="bg-blue-600 hover:bg-blue-700 transition-colors text-white text-xs px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 w-full sm:w-auto">
                <i class="fa-solid fa-sync"></i> Refresh Data API
@@ -293,7 +356,6 @@
 
   </main>
 
-  <!-- MODAL: Pengaturan API -->
   <div id="modal-api-settings" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden border border-slate-200">
       <div class="bg-emerald-700 text-white p-4 flex justify-between items-center">
@@ -303,6 +365,7 @@
       <div class="p-5 space-y-4 text-xs">
         <label class="block font-semibold text-slate-700 mb-1">Google Script Web App URL</label>
         <input type="url" id="input-script-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full border border-slate-300 rounded-lg p-2.5 bg-slate-50 font-mono text-[11px] focus:bg-white focus:ring-2 focus:ring-emerald-500">
+        <p class="text-slate-500 mt-1">Pastikan Apps Script Anda mengirimkan data <code class="bg-slate-100 px-1 py-0.5 rounded">masterSiswa</code> yang berupa object atau array dari sheet DataSiswa untuk menampilkan biodata secara detail.</p>
         <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
           <button type="button" onclick="closeModalApiSettings()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg">Batal</button>
           <button type="button" onclick="saveApiUrlSetting()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg">Simpan URL</button>
@@ -311,12 +374,30 @@
     </div>
   </div>
 
+  <div id="modal-biodata-detail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-200">
+      <div class="bg-indigo-600 text-white p-4 flex justify-between items-center shrink-0">
+        <h3 class="text-sm font-bold flex items-center gap-2"><i class="fa-regular fa-id-card"></i> Detail Biodata Siswa</h3>
+        <button onclick="closeModalBiodata()" class="text-white hover:text-indigo-200 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+      <div class="p-0 overflow-y-auto" id="biodata-modal-content">
+        <!-- Konten detail biodata akan di-inject di sini -->
+      </div>
+      <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end shrink-0">
+          <button type="button" onclick="closeModalBiodata()" class="px-5 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50">Tutup</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let GOOGLE_SCRIPT_URL = localStorage.getItem('presensi_gas_url') || "";
 
-    // UBAH: Jadikan variabel 'let' dan kosongkan awalnya, data akan diisi dari Spreadsheet
-    let masterSiswa = {};
-
+    // masterSiswa menyimpan daftar nama per kelas.
+    // fullDataSiswa menyimpan data lengkap murid (array of objects)
+    let masterSiswa = {}; 
+    let fullDataSiswa = []; 
+    let currentBiodataView = []; // Tambahan untuk menyimpan data view saat ini
+    
     let presensiData = [];
     let weeklyChartInstance = null, distributionChartInstance = null;
 
@@ -367,13 +448,19 @@
       });
       if(tabName === 'dashboard') updateDashboard();
       if(tabName === 'sheets') renderSpreadsheetTable();
+      // Saat masuk tab biodata, jika ada kelas terpilih, coba render
+      if(tabName === 'biodata') {
+         const selectedKelas = document.getElementById('filter-biodata-kelas').value;
+         if(selectedKelas) renderBiodataList();
+      }
     }
 
-    // --- INTEGRASI GET (Membaca Data) ---
     async function fetchLiveDataFromSpreadsheet(forceRefresh = false) {
       if (!GOOGLE_SCRIPT_URL) return;
       const icon = document.getElementById('refresh-icon');
+      const iconBio = document.getElementById('refresh-biodata-icon');
       if (icon) icon.classList.add('animate-spin');
+      if (iconBio) iconBio.classList.add('animate-spin');
 
       try {
         const response = await fetch(GOOGLE_SCRIPT_URL);
@@ -392,11 +479,53 @@
             }));
           }
           
-          // 2. Parse Data Master Siswa dari Sheet DataSiswa
-          if (result.masterSiswa && Object.keys(result.masterSiswa).length > 0) {
-            masterSiswa = result.masterSiswa;
-            updateDropdownKelasDinamis(); // Update UI dropdown kelas otomatis
+          // 2. Parse Data Master Siswa
+          // Mengasumsikan API (Google Apps Script) mengembalikan:
+          // result.masterSiswa (hanya { "KelasA": ["Nama1", "Nama2"] } untuk dropdown)
+          // dan (ideal) result.fullDataSiswa (array of object dengan kolom lengkap: NIS, Nama, TTL, dll)
+          
+          if (result.fullDataSiswa && Array.isArray(result.fullDataSiswa)) {
+              fullDataSiswa = result.fullDataSiswa;
+              
+              // Jika masterSiswa tidak dikirim, bangun dari fullDataSiswa
+              if(!result.masterSiswa) {
+                  masterSiswa = {};
+                  fullDataSiswa.forEach(siswa => {
+                      const kelas = siswa.Kelas || siswa.kelas;
+                      const nama = siswa.Nama || siswa.nama;
+                      if(kelas && nama) {
+                          if(!masterSiswa[kelas]) masterSiswa[kelas] = [];
+                          masterSiswa[kelas].push(nama);
+                      }
+                  });
+              } else {
+                  masterSiswa = result.masterSiswa;
+              }
+          } else if (result.masterSiswa && Object.keys(result.masterSiswa).length > 0) {
+              masterSiswa = result.masterSiswa;
+              // Jika backend hanya kirim masterSiswa (format {kelas: [nama]}), 
+              // buat mock fullDataSiswa agar biodata tetap jalan (meski informasinya tidak lengkap)
+              fullDataSiswa = [];
+              for(const kelas in masterSiswa) {
+                  masterSiswa[kelas].forEach(nama => {
+                      fullDataSiswa.push({
+                          Kelas: kelas,
+                          Nama: nama,
+                          NIS: '-',
+                          'Asal Sekolah': '-',
+                          'Jenis Kelamin': '-',
+                          'No HP': '-',
+                          'TTL': '-',
+                          'Nama Ayah': '-',
+                          'Nama Ibu': '-',
+                          'Pekerjaan Ortu': '-',
+                          'Alamat': '-'
+                      });
+                  });
+              }
           }
+
+          updateDropdownKelasDinamis();
 
           if(forceRefresh) showAlert('success', 'Sinkronisasi Berhasil', 'Data terbaru berhasil diambil dari Spreadsheet.');
         }
@@ -405,12 +534,19 @@
         if(forceRefresh) showAlert('danger', 'Gagal Sinkron', 'Gagal mengambil data dari Google Sheet. Pastikan URL benar.');
       } finally {
         if (icon) icon.classList.remove('animate-spin');
+        if (iconBio) iconBio.classList.remove('animate-spin');
         updateDashboard();
         renderSpreadsheetTable();
+        
+        // Refresh Biodata if in view
+        const currentTab = document.getElementById('select-navigation-tab').value;
+        if(currentTab === 'biodata') {
+            const selectedKelas = document.getElementById('filter-biodata-kelas').value;
+            if(selectedKelas) renderBiodataList();
+        }
       }
     }
 
-    // Fungsi Baru: Memperbarui semua dropdown kelas berdasarkan data masterSiswa terbaru
     function updateDropdownKelasDinamis() {
       const kelasList = Object.keys(masterSiswa).sort();
       
@@ -420,12 +556,238 @@
       const inputOptions = `<option value="">-- Pilih Kelas --</option>` + 
                            kelasList.map(k => `<option value="${k}">${k}</option>`).join('');
 
+      // Simpan nilai lama
+      const oldDashboard = document.getElementById('filter-kelas').value;
+      const oldSheet = document.getElementById('filter-sheet-kelas').value;
+      const oldBio = document.getElementById('filter-biodata-kelas').value;
+      const oldPresensi = document.getElementById('input-kelas').value;
+
       document.getElementById('filter-kelas').innerHTML = filterOptions;
       document.getElementById('filter-sheet-kelas').innerHTML = filterOptions;
+      document.getElementById('filter-biodata-kelas').innerHTML = inputOptions; // Biodata butuh pilih spesifik
       document.getElementById('input-kelas').innerHTML = inputOptions;
+
+      // Kembalikan nilai lama jika masih ada
+      if(kelasList.includes(oldDashboard) || oldDashboard === 'semua') document.getElementById('filter-kelas').value = oldDashboard;
+      if(kelasList.includes(oldSheet) || oldSheet === 'semua') document.getElementById('filter-sheet-kelas').value = oldSheet;
+      if(kelasList.includes(oldBio)) document.getElementById('filter-biodata-kelas').value = oldBio;
+      if(kelasList.includes(oldPresensi)) document.getElementById('input-kelas').value = oldPresensi;
     }
 
-    // --- INTEGRASI POST (Menyimpan Data) ---
+    function renderBiodataList() {
+        const kelas = document.getElementById('filter-biodata-kelas').value;
+        const emptyState = document.getElementById('biodata-empty-state');
+        const listContainer = document.getElementById('biodata-list-container');
+        const grid = document.getElementById('biodata-cards-grid');
+        const searchInput = document.getElementById('search-biodata');
+        const searchMobile = document.getElementById('search-biodata-mobile');
+        
+        // Reset pencarian
+        if(searchInput) searchInput.value = "";
+        if(searchMobile) searchMobile.value = "";
+        document.getElementById('no-search-results').classList.add('hidden');
+
+        if (!kelas) {
+            emptyState.classList.remove('hidden');
+            listContainer.classList.add('hidden');
+            return;
+        }
+
+        emptyState.classList.add('hidden');
+        listContainer.classList.remove('hidden');
+        
+        document.getElementById('biodata-kelas-label').innerText = kelas;
+
+        // Ambil data murid untuk kelas ini dari fullDataSiswa
+        // Kita tangani properti dengan case yang mungkin berbeda (Kelas vs kelas)
+        const siswaKelasIni = fullDataSiswa.filter(s => (s.Kelas || s.kelas) === kelas);
+        
+        // Sort by nama
+        siswaKelasIni.sort((a, b) => {
+            const namaA = (a.Nama || a.nama || "").toUpperCase();
+            const namaB = (b.Nama || b.nama || "").toUpperCase();
+            return namaA.localeCompare(namaB);
+        });
+
+        currentBiodataView = siswaKelasIni;
+        document.getElementById('biodata-count').innerText = siswaKelasIni.length;
+
+        if (siswaKelasIni.length === 0) {
+            grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 text-sm">Tidak ada data murid yang ditemukan untuk kelas ini di sistem.</div>`;
+            return;
+        }
+
+        grid.innerHTML = currentBiodataView.map((siswa, idx) => {
+            const nama = siswa.Nama || siswa.nama || 'Nama Tidak Diketahui';
+            const nis = siswa.NIS || siswa.nis || '-';
+            const jk = siswa['Jenis Kelamin'] || siswa.jenis_kelamin || '-';
+            const noHp = siswa['No HP'] || siswa.nohp || siswa.hp || '-';
+            
+            // Tentukan icon gender
+            let genderIcon = 'fa-user';
+            let genderColor = 'text-slate-400 bg-slate-100';
+            if(jk.toLowerCase().includes('laki') || jk === 'L') {
+                genderIcon = 'fa-person';
+                genderColor = 'text-blue-500 bg-blue-50';
+            } else if(jk.toLowerCase().includes('perempuan') || jk === 'P') {
+                genderIcon = 'fa-person-dress';
+                genderColor = 'text-pink-500 bg-pink-50';
+            }
+
+            return `
+            <div class="biodata-card bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow flex flex-col h-full" data-nama="${nama.toLowerCase()}">
+                <div class="p-4 flex-grow">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${genderColor}">
+                            <i class="fa-solid ${genderIcon}"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-md">NIS: ${nis}</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-sm mb-1 line-clamp-2 leading-tight">${nama}</h3>
+                    <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone text-[10px] mr-1"></i> ${noHp}</p>
+                </div>
+                <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 mt-auto">
+                    <button onclick="openModalBiodata(${idx})" class="w-full bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-600 text-xs font-semibold py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-eye"></i> Lihat Detail Biodata
+                    </button>
+                </div>
+            </div>
+            `;
+        }).join('');
+    }
+
+    function filterBiodataCards(inputId = 'search-biodata') {
+        const input = document.getElementById(inputId);
+        const filter = input.value.toLowerCase();
+        const cards = document.querySelectorAll('.biodata-card');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const nama = card.getAttribute('data-nama');
+            if (nama.indexOf(filter) > -1) {
+                card.style.display = "";
+                visibleCount++;
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        const noResult = document.getElementById('no-search-results');
+        if(visibleCount === 0 && cards.length > 0) {
+            noResult.classList.remove('hidden');
+        } else {
+            noResult.classList.add('hidden');
+        }
+    }
+
+    function openModalBiodata(idx) {
+        try {
+            const siswa = currentBiodataView[idx];
+            if (!siswa) return;
+
+            const content = document.getElementById('biodata-modal-content');
+            
+            // Helper function to extract data securely
+            const getVal = (keys) => {
+                for(let key of keys) {
+                    if(siswa[key] !== undefined && siswa[key] !== null && siswa[key] !== '') return siswa[key];
+                }
+                return '-';
+            };
+
+            const nama = getVal(['Nama', 'nama']);
+            const nis = getVal(['NIS', 'nis']);
+            const kelas = getVal(['Kelas', 'kelas']);
+            const jurusan = getVal(['Jurusan', 'jurusan']);
+            const ttl = getVal(['TTL', 'Tempat Tanggal Lahir', 'ttl']);
+            const jk = getVal(['Jenis Kelamin', 'jenis_kelamin', 'jk']);
+            const asalSekolah = getVal(['Asal Sekolah', 'asal_sekolah']);
+            const noHp = getVal(['No HP', 'nohp', 'hp']);
+            const beasiswa = getVal(['Beasiswa', 'beasiswa']);
+            const namaAyah = getVal(['Nama Ayah', 'nama_ayah', 'ayah']);
+            const namaIbu = getVal(['Nama Ibu', 'nama_ibu', 'ibu']);
+            const pekerjaanOrtu = getVal(['Pekerjaan Ortu', 'pekerjaan_ortu', 'pekerjaan']);
+            const alamat = getVal(['Alamat', 'alamat']);
+
+            // Cek apakah data lengkap, jika tidak beri notifikasi
+            const isMockData = (nis === '-' && (ttl === '-' || ttl === undefined));
+            const mockWarning = isMockData ? `
+                <div class="bg-amber-50 text-amber-800 p-3 mb-4 rounded-lg text-xs border border-amber-200 flex gap-2">
+                    <i class="fa-solid fa-triangle-exclamation mt-0.5 text-amber-600"></i>
+                    <div>
+                        <p class="font-bold mb-0.5">Hanya Menampilkan Data Dasar</p>
+                        <p>Detail ini masih kosong karena script Web App Google Anda saat ini hanya mengirimkan data Nama dan Kelas. Lengkapi balasan data <code>fullDataSiswa</code> dari sisi Google Apps Script agar detail ini dapat ditampilkan.</p>
+                    </div>
+                </div>
+            ` : '';
+
+            let avatarHtml = `<i class="fa-solid fa-user text-4xl text-slate-300"></i>`;
+            if(jk.toLowerCase().includes('laki') || jk === 'L') {
+                avatarHtml = `<i class="fa-solid fa-person text-4xl text-blue-300"></i>`;
+            } else if(jk.toLowerCase().includes('perempuan') || jk === 'P') {
+                avatarHtml = `<i class="fa-solid fa-person-dress text-4xl text-pink-300"></i>`;
+            }
+
+            content.innerHTML = `
+                <div class="p-6">
+                    ${mockWarning}
+                    <div class="flex flex-col sm:flex-row gap-5 items-center sm:items-start mb-6 pb-6 border-b border-slate-100">
+                        <div class="w-24 h-24 rounded-2xl bg-slate-100 border-4 border-white shadow-sm flex items-center justify-center shrink-0">
+                            ${avatarHtml}
+                        </div>
+                        <div class="text-center sm:text-left flex-grow">
+                            <h2 class="text-xl font-bold text-slate-800 mb-1">${nama}</h2>
+                            <div class="flex flex-wrap justify-center sm:justify-start gap-2 mb-2 text-xs">
+                                <span class="bg-indigo-100 text-indigo-700 font-semibold px-2.5 py-1 rounded-md">Kelas: ${kelas}</span>
+                                <span class="bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-md">NIS: ${nis}</span>
+                            </div>
+                            <p class="text-sm text-slate-500 font-medium">${jurusan !== '-' ? jurusan : ''}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                        <!-- Data Pribadi -->
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 border-b border-slate-100 pb-1">Data Pribadi</h4>
+                            
+                            <div><span class="block text-[10px] text-slate-400 font-semibold mb-0.5">Tempat, Tanggal Lahir</span><p class="text-sm text-slate-800 font-medium">${ttl}</p></div>
+                            <div><span class="block text-[10px] text-slate-400 font-semibold mb-0.5">Jenis Kelamin</span><p class="text-sm text-slate-800 font-medium">${jk}</p></div>
+                            <div><span class="block text-[10px] text-slate-400 font-semibold mb-0.5">Nomor HP / Telepon</span>
+                                 <p class="text-sm text-slate-800 font-medium">${noHp} 
+                                    ${noHp !== '-' ? `<a href="https://wa.me/${noHp.replace(/[^0-9]/g, '')}" target="_blank" class="ml-2 text-emerald-500 hover:text-emerald-600" title="Chat WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+                                 </p>
+                            </div>
+                            <div><span class="block text-[10px] text-slate-400 font-semibold mb-0.5">Alamat Tempat Tinggal</span><p class="text-sm text-slate-800 font-medium leading-tight">${alamat}</p></div>
+                        </div>
+
+                        <!-- Data Sekolah & Ortu -->
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 border-b border-slate-100 pb-1">Data Akademik & Keluarga</h4>
+                            
+                            <div><span class="block text-[10px] text-slate-400 font-semibold mb-0.5">Asal Sekolah (SMP/MTs)</span><p class="text-sm text-slate-800 font-medium">${asalSekolah}</p></div>
+                            <div><span class="block text-[10px] text-slate-400 font-semibold mb-0.5">Beasiswa</span><p class="text-sm text-slate-800 font-medium">${beasiswa}</p></div>
+                            
+                            <div class="mt-4 bg-orange-50/50 p-3 rounded-lg border border-orange-100">
+                                <div><span class="block text-[10px] text-slate-500 font-semibold mb-0.5">Nama Ayah</span><p class="text-sm text-slate-800 font-semibold">${namaAyah}</p></div>
+                                <div class="mt-2"><span class="block text-[10px] text-slate-500 font-semibold mb-0.5">Nama Ibu</span><p class="text-sm text-slate-800 font-semibold">${namaIbu}</p></div>
+                                <div class="mt-2"><span class="block text-[10px] text-slate-500 font-semibold mb-0.5">Pekerjaan Orang Tua</span><p class="text-sm text-slate-800 font-medium">${pekerjaanOrtu}</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modal-biodata-detail').classList.remove('hidden');
+        } catch(e) {
+            console.error("Error parsing siswa data:", e);
+            showAlert('danger', 'Error', 'Gagal memuat detail biodata murid.');
+        }
+    }
+
+    function closeModalBiodata() {
+        document.getElementById('modal-biodata-detail').classList.add('hidden');
+    }
+
     async function handleFormSubmit(e) {
       e.preventDefault();
       if (!GOOGLE_SCRIPT_URL) {
@@ -453,7 +815,6 @@
       btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Menyimpan ke Sheet...`;
 
       try {
-        // PERBAIKAN: Menggunakan text/plain agar tidak terkena error preflight CORS di browser
         const response = await fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -528,12 +889,11 @@
       );
 
       if (filteredData.length === 0) {
-        document.getElementById('sheet-table-body').innerHTML = `<tr><td colspan="6" class="p-6 text-center text-xs text-slate-500 italic">Tidak ada data presensi untuk kelas ini.</td></tr>`;
+        document.getElementById('sheet-table-body').innerHTML = `<tr><td colspan="6" class="p-6 text-center text-xs text-slate-500 italic">Tidak ada data presensi.</td></tr>`;
         return;
       }
 
       document.getElementById('sheet-table-body').innerHTML = filteredData.map((d, i) => {
-        // Menambahkan warna untuk masing-masing status agar lebih cantik
         let statusColor = "text-slate-700";
         if(d.status === 'Hadir') statusColor = "text-emerald-600";
         else if(d.status === 'Izin') statusColor = "text-amber-500";
@@ -553,11 +913,17 @@
     }
 
     function updateDashboard() {
+      const filterDashboard = document.getElementById('filter-kelas').value;
+      const dataToProcess = filterDashboard === 'semua' 
+                            ? presensiData 
+                            : presensiData.filter(d => d.kelas === filterDashboard);
+
       let h=0, i=0, s=0, a=0;
-      presensiData.forEach(d => {
+      dataToProcess.forEach(d => {
         if(d.status==='Hadir') h++; else if(d.status==='Izin') i++; else if(d.status==='Sakit') s++; else a++;
       });
-      const t = presensiData.length || 1;
+      const t = dataToProcess.length || 1;
+      
       document.getElementById('stat-hadir').innerText = h; document.getElementById('stat-izin').innerText = i;
       document.getElementById('stat-sakit').innerText = s; document.getElementById('stat-alpa').innerText = a;
       
@@ -566,18 +932,20 @@
       document.getElementById('percent-sakit').innerText = ((s/t)*100).toFixed(1)+'%';
       document.getElementById('percent-alpa').innerText = ((a/t)*100).toFixed(1)+'%';
       
-      document.getElementById('total-presensi-count').innerText = presensiData.length;
+      document.getElementById('total-presensi-count').innerText = dataToProcess.length;
       if(distributionChartInstance) {
         distributionChartInstance.data.datasets[0].data = [h,i,s,a];
         distributionChartInstance.update();
       }
 
-      const recent = [...presensiData].reverse().slice(0,5);
-      document.getElementById('recent-activity-body').innerHTML = recent.map(r => `<tr><td class="p-2">${r.timestamp}</td><td class="p-2 font-bold">${r.nama}</td><td class="p-2">${r.kelas}</td><td class="p-2">${r.status}</td><td class="p-2">${r.catatan}</td></tr>`).join('');
+      const recent = [...dataToProcess].reverse().slice(0,5);
+      document.getElementById('recent-activity-body').innerHTML = recent.length > 0 
+          ? recent.map(r => `<tr><td class="p-2">${r.timestamp}</td><td class="p-2 font-bold">${r.nama}</td><td class="p-2">${r.kelas}</td><td class="p-2">${r.status}</td><td class="p-2">${r.catatan}</td></tr>`).join('')
+          : `<tr><td colspan="5" class="p-4 text-center text-xs text-slate-500 italic">Belum ada aktivitas presensi</td></tr>`;
     }
 
     function initCharts() {
-      weeklyChartInstance = new Chart(document.getElementById('weeklyChart').getContext('2d'), { type: 'bar', data: { labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'], datasets: [ { label: 'Hadir', data: [32, 30, 35, 31, 28], backgroundColor: '#10b981' } ] }});
+      weeklyChartInstance = new Chart(document.getElementById('weeklyChart').getContext('2d'), { type: 'bar', data: { labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'], datasets: [ { label: 'Hadir', data: [0, 0, 0, 0, 0], backgroundColor: '#10b981' } ] }});
       distributionChartInstance = new Chart(document.getElementById('distributionChart').getContext('2d'), { type: 'doughnut', data: { labels: ['Hadir', 'Izin', 'Sakit', 'Alpa'], datasets: [{ data: [0, 0, 0, 0], backgroundColor: ['#10b981', '#f59e0b', '#0ea5e9', '#f43f5e'] }] }});
     }
   </script>
