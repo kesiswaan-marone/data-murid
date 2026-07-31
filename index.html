@@ -115,95 +115,61 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <!-- Hadir -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-2 h-full bg-emerald-500"></div>
-          <div class="flex justify-between items-start">
-            <div>
-              <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Hadir</p>
-              <h3 class="text-2xl font-bold text-slate-800 mt-1" id="stat-hadir">0</h3>
-            </div>
-            <span class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm font-semibold">
-              <i class="fa-solid fa-user-check"></i>
-            </span>
-          </div>
-          <p class="text-xs text-emerald-600 mt-3 flex items-center gap-1"><i class="fa-solid fa-arrow-up"></i> <span id="percent-hadir">0%</span></p>
+      <!-- Grafik Batang 5 Hari Terakhir -->
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm w-full">
+        <h3 class="text-sm font-bold text-slate-800 mb-4 text-center sm:text-left">Grafik Kehadiran 5 Hari Terakhir</h3>
+        <div class="relative h-64 w-full">
+          <canvas id="barChart5Hari"></canvas>
         </div>
-        <!-- Izin -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-2 h-full bg-amber-500"></div>
-          <div class="flex justify-between items-start">
-            <div>
-              <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Izin</p>
-              <h3 class="text-2xl font-bold text-slate-800 mt-1" id="stat-izin">0</h3>
-            </div>
-            <span class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-sm font-semibold">
-              <i class="fa-solid fa-envelope-open-text"></i>
-            </span>
-          </div>
-          <p class="text-xs text-amber-600 mt-3 flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> <span id="percent-izin">0%</span></p>
-        </div>
-        <!-- Sakit -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-2 h-full bg-sky-500"></div>
-          <div class="flex justify-between items-start">
-            <div>
-              <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Sakit</p>
-              <h3 class="text-2xl font-bold text-slate-800 mt-1" id="stat-sakit">0</h3>
-            </div>
-            <span class="w-9 h-9 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center text-sm font-semibold">
-              <i class="fa-solid fa-notes-medical"></i>
-            </span>
-          </div>
-          <p class="text-xs text-sky-600 mt-3 flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> <span id="percent-sakit">0%</span></p>
-        </div>
-        <!-- Alpa -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-2 h-full bg-rose-500"></div>
-          <div class="flex justify-between items-start">
-            <div>
-              <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Alpa</p>
-              <h3 class="text-2xl font-bold text-slate-800 mt-1" id="stat-alpa">0</h3>
-            </div>
-            <span class="w-9 h-9 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-sm font-semibold">
-              <i class="fa-solid fa-user-xmark"></i>
-            </span>
-          </div>
-          <p class="text-xs text-rose-600 mt-3 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> <span id="percent-alpa">0%</span></p>
+        <div class="text-center pt-4 mt-4 border-t border-slate-100 text-xs text-slate-500">
+          Total Rekapitulasi Tersaring: <strong class="text-slate-800" id="total-presensi-count">0</strong> data
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <h3 class="text-sm font-bold text-slate-800 mb-4">Tren Kehadiran</h3>
-          <div class="h-64"><canvas id="weeklyChart"></canvas></div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Tabel Rekap 5 Hari Terakhir -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-sm font-bold text-slate-800">Rekap 5 Hari Terakhir</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold">
+                  <th class="p-3 text-left">Tanggal</th>
+                  <th class="p-3 text-center">Hadir</th>
+                  <th class="p-3 text-center">Izin</th>
+                  <th class="p-3 text-center">Sakit</th>
+                  <th class="p-3 text-center">Alpa</th>
+                  <th class="p-3 text-center">Total</th>
+                </tr>
+              </thead>
+              <tbody id="rekap-5-hari-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
         </div>
-        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-          <h3 class="text-sm font-bold text-slate-800 mb-2">Persentase Kehadiran</h3>
-          <div class="h-52 my-auto relative"><canvas id="distributionChart"></canvas></div>
-          <div class="text-center pt-2 text-xs text-slate-500">Total Presensi: <strong class="text-slate-800" id="total-presensi-count">0</strong></div>
-        </div>
-      </div>
 
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-sm font-bold text-slate-800">Aktivitas Presensi Terakhir</h3>
-          <button onclick="switchTab('sheets')" class="text-xs text-blue-600 hover:underline">Lihat Semua Data &rarr;</button>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold">
-                <th class="p-3">Tanggal & Waktu</th>
-                <th class="p-3">Nama Murid</th>
-                <th class="p-3">Kelas</th>
-                <th class="p-3">Status</th>
-                <th class="p-3">Keterangan</th>
-              </tr>
-            </thead>
-            <tbody id="recent-activity-body" class="divide-y divide-slate-100"></tbody>
-          </table>
+        <!-- Aktivitas Presensi Terakhir -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-sm font-bold text-slate-800">Aktivitas Presensi Terakhir</h3>
+            <button onclick="switchTab('sheets')" class="text-xs text-blue-600 hover:underline">Lihat Semua Data &rarr;</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold">
+                  <!-- Ubah teks di bawah ini ke bahasa yang Anda inginkan -->
+                  <th class="p-3">Tanggal & Waktu</th>
+                  <th class="p-3">Nama Murid</th>
+                  <th class="p-3">Kelas</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody id="recent-activity-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -362,7 +328,6 @@
             <thead>
               <tr class="bg-emerald-700 text-white">
                 <th class="p-2.5 border-r border-emerald-600 w-12 text-center">No</th>
-                <th class="p-2.5 border-r border-emerald-600">Timestamp</th>
                 <th class="p-2.5 border-r border-emerald-600">Nama Murid</th>
                 <th class="p-2.5 border-r border-emerald-600">Kelas</th>
                 <th class="p-2.5 border-r border-emerald-600">Status</th>
@@ -420,7 +385,7 @@
     let currentBiodataView = []; // Tambahan untuk menyimpan data view saat ini
     
     let presensiData = [];
-    let weeklyChartInstance = null, distributionChartInstance = null;
+    let barChartInstance = null;
 
     window.onload = function() {
       const now = new Date();
@@ -910,7 +875,7 @@
       );
 
       if (filteredData.length === 0) {
-        document.getElementById('sheet-table-body').innerHTML = `<tr><td colspan="6" class="p-6 text-center text-xs text-slate-500 italic">Tidak ada data presensi.</td></tr>`;
+        document.getElementById('sheet-table-body').innerHTML = `<tr><td colspan="5" class="p-6 text-center text-xs text-slate-500 italic">Tidak ada data presensi.</td></tr>`;
         return;
       }
 
@@ -924,7 +889,6 @@
         return `
         <tr class="${i%2===0?'bg-white':'bg-slate-50'} hover:bg-slate-100 transition-colors">
           <td class="p-2.5 text-center border-r border-slate-100">${i + 1}</td>
-          <td class="p-2.5 border-r border-slate-100">${d.timestamp}</td>
           <td class="p-2.5 border-r border-slate-100 font-semibold text-slate-700">${d.nama}</td>
           <td class="p-2.5 border-r border-slate-100">${d.kelas}</td>
           <td class="p-2.5 border-r border-slate-100 font-bold ${statusColor}">${d.status}</td>
@@ -992,31 +956,155 @@
       dataToProcess.forEach(d => {
         if(d.status==='Hadir') h++; else if(d.status==='Izin') i++; else if(d.status==='Sakit') s++; else a++;
       });
-      const t = dataToProcess.length || 1;
-      
-      document.getElementById('stat-hadir').innerText = h; document.getElementById('stat-izin').innerText = i;
-      document.getElementById('stat-sakit').innerText = s; document.getElementById('stat-alpa').innerText = a;
-      
-      document.getElementById('percent-hadir').innerText = ((h/t)*100).toFixed(1)+'%';
-      document.getElementById('percent-izin').innerText = ((i/t)*100).toFixed(1)+'%';
-      document.getElementById('percent-sakit').innerText = ((s/t)*100).toFixed(1)+'%';
-      document.getElementById('percent-alpa').innerText = ((a/t)*100).toFixed(1)+'%';
       
       document.getElementById('total-presensi-count').innerText = dataToProcess.length;
-      if(distributionChartInstance) {
-        distributionChartInstance.data.datasets[0].data = [h,i,s,a];
-        distributionChartInstance.update();
+
+      // --- KODE TAMBAHAN UNTUK TABEL REKAP 5 HARI TERAKHIR ---
+      const rekapHarian = {};
+      dataToProcess.forEach(d => {
+        if (!d.timestamp || d.timestamp === '-') return;
+        
+        let recordDate = '';
+        const ts = d.timestamp.trim();
+        
+        // Ekstrak string tanggal format standar (YYYY-MM-DD)
+        if (ts.match(/^\d{4}-\d{2}-\d{2}/)) {
+          recordDate = ts.substring(0, 10);
+        } else if (ts.match(/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}/)) {
+          const parts = ts.split(/[ T]/)[0].split(/[\/\-]/);
+          let part1 = parseInt(parts[0]); let part2 = parseInt(parts[1]); let year = parts[2];
+          if (part1 > 12) recordDate = `${year}-${part2.toString().padStart(2,'0')}-${part1.toString().padStart(2,'0')}`;
+          else if (part2 > 12) recordDate = `${year}-${part1.toString().padStart(2,'0')}-${part2.toString().padStart(2,'0')}`;
+          else recordDate = `${year}-${part2.toString().padStart(2,'0')}-${part1.toString().padStart(2,'0')}`; 
+        } else {
+          const t = new Date(ts);
+          if (!isNaN(t.getTime())) recordDate = `${t.getFullYear()}-${(t.getMonth()+1).toString().padStart(2,'0')}-${t.getDate().toString().padStart(2,'0')}`;
+          else recordDate = ts.split(/[ T]/)[0];
+        }
+
+        if(!rekapHarian[recordDate]) {
+          rekapHarian[recordDate] = { hadir: 0, izin: 0, sakit: 0, alpa: 0, total: 0 };
+        }
+        
+        if(d.status === 'Hadir') rekapHarian[recordDate].hadir++;
+        else if(d.status === 'Izin') rekapHarian[recordDate].izin++;
+        else if(d.status === 'Sakit') rekapHarian[recordDate].sakit++;
+        else if(d.status === 'Alpa') rekapHarian[recordDate].alpa++;
+        
+        rekapHarian[recordDate].total++;
+      });
+
+      // Urutkan dari tanggal terbaru dan ambil 5 teratas
+      const sortedDates = Object.keys(rekapHarian).sort((a, b) => b.localeCompare(a)).slice(0, 5);
+      
+      // Update data untuk Chart Batang 5 Hari Terakhir
+      if (barChartInstance) {
+        // Balik urutan agar tanggal terlama ada di sebelah kiri (kiri ke kanan)
+        const chartDates = [...sortedDates].reverse(); 
+        const labels = [];
+        const dHadir = [], dIzin = [], dSakit = [], dAlpa = [];
+
+        chartDates.forEach(d => {
+          const r = rekapHarian[d];
+          const dObj = new Date(d);
+          // Format label tanggal untuk grafik
+          labels.push(!isNaN(dObj.getTime()) ? new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short' }).format(dObj) : d);
+          dHadir.push(r.hadir);
+          dIzin.push(r.izin);
+          dSakit.push(r.sakit);
+          dAlpa.push(r.alpa);
+        });
+
+        barChartInstance.data.labels = labels;
+        barChartInstance.data.datasets[0].data = dHadir;
+        barChartInstance.data.datasets[1].data = dIzin;
+        barChartInstance.data.datasets[2].data = dSakit;
+        barChartInstance.data.datasets[3].data = dAlpa;
+        barChartInstance.update();
       }
+
+      const rekapTableBody = document.getElementById('rekap-5-hari-body');
+      
+      if (rekapTableBody) {
+        if (sortedDates.length === 0) {
+          rekapTableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-xs text-slate-500 italic">Belum ada data presensi</td></tr>`;
+        } else {
+          rekapTableBody.innerHTML = sortedDates.map(dateStr => {
+            const r = rekapHarian[dateStr];
+            let displayDate = dateStr;
+            const dObj = new Date(dateStr);
+            if (!isNaN(dObj.getTime())) {
+              displayDate = new Intl.DateTimeFormat('id-ID', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }).format(dObj);
+            }
+            return `
+              <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                <td class="p-3 whitespace-nowrap text-slate-700 font-medium">${displayDate}</td>
+                <td class="p-3 text-emerald-600 font-semibold text-center">${r.hadir}</td>
+                <td class="p-3 text-amber-500 font-semibold text-center">${r.izin}</td>
+                <td class="p-3 text-sky-500 font-semibold text-center">${r.sakit}</td>
+                <td class="p-3 text-rose-600 font-semibold text-center">${r.alpa}</td>
+                <td class="p-3 text-slate-800 font-bold text-center bg-slate-50/50">${r.total}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+      // ------------------------------------------
 
       const recent = [...dataToProcess].reverse().slice(0,5);
       document.getElementById('recent-activity-body').innerHTML = recent.length > 0 
-          ? recent.map(r => `<tr><td class="p-2">${r.timestamp}</td><td class="p-2 font-bold">${r.nama}</td><td class="p-2">${r.kelas}</td><td class="p-2">${r.status}</td><td class="p-2">${r.catatan}</td></tr>`).join('')
+          ? recent.map(r => {
+              // --- MENGUBAH BAHASA FORMAT TANGGAL ---
+              // Ganti 'id-ID' menjadi 'en-US' untuk bahasa Inggris, atau 'ar-SA' untuk Arab, dst.
+              let formatWaktu = r.timestamp;
+              let tgl = new Date(r.timestamp);
+              if (!isNaN(tgl.getTime())) {
+                  formatWaktu = new Intl.DateTimeFormat('id-ID', { 
+                      weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', 
+                      hour: '2-digit', minute: '2-digit' 
+                  }).format(tgl);
+              }
+              
+              return `<tr><td class="p-2 whitespace-nowrap">${formatWaktu}</td><td class="p-2 font-bold">${r.nama}</td><td class="p-2">${r.kelas}</td><td class="p-2">${r.status}</td><td class="p-2">${r.catatan}</td></tr>`;
+          }).join('')
           : `<tr><td colspan="5" class="p-4 text-center text-xs text-slate-500 italic">Belum ada aktivitas presensi</td></tr>`;
     }
 
     function initCharts() {
-      weeklyChartInstance = new Chart(document.getElementById('weeklyChart').getContext('2d'), { type: 'bar', data: { labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'], datasets: [ { label: 'Hadir', data: [0, 0, 0, 0, 0], backgroundColor: '#10b981' } ] }});
-      distributionChartInstance = new Chart(document.getElementById('distributionChart').getContext('2d'), { type: 'doughnut', data: { labels: ['Hadir', 'Izin', 'Sakit', 'Alpa'], datasets: [{ data: [0, 0, 0, 0], backgroundColor: ['#10b981', '#f59e0b', '#0ea5e9', '#f43f5e'] }] }});
+      const ctx = document.getElementById('barChart5Hari');
+      if (!ctx) return;
+      
+      barChartInstance = new Chart(ctx.getContext('2d'), { 
+        type: 'bar', 
+        data: { 
+          labels: [], // Diisi dinamis di updateDashboard()
+          datasets: [
+            { label: 'Hadir', data: [], backgroundColor: '#10b981', borderRadius: 4 },
+            { label: 'Izin', data: [], backgroundColor: '#f59e0b', borderRadius: 4 },
+            { label: 'Sakit', data: [], backgroundColor: '#0ea5e9', borderRadius: 4 },
+            { label: 'Alpa', data: [], backgroundColor: '#f43f5e', borderRadius: 4 }
+          ] 
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+                grid: { display: false }
+            },
+            y: { 
+                beginAtZero: true, 
+                ticks: { stepSize: 1, precision: 0 } // Angka bulat
+            }
+          },
+          plugins: {
+            legend: { 
+                position: 'bottom',
+                labels: { usePointStyle: true, boxWidth: 8, padding: 20 }
+            }
+          }
+        }
+      });
     }
   </script>
 </body>
