@@ -943,13 +943,44 @@
                             ? presensiData 
                             : presensiData.filter(d => d.kelas === filterDashboard);
 
-      // 2. Filter berdasarkan rentang tanggal
+      // 2. Filter berdasarkan rentang tanggal (PERBAIKAN FORMAT TANGGAL)
       if (tanggalMulai || tanggalAkhir) {
         dataToProcess = dataToProcess.filter(d => {
-          // Asumsi format timestamp "YYYY-MM-DD HH:MM:00"
-          const recordDate = d.timestamp.split(' ')[0]; 
+          if (!d.timestamp || d.timestamp === '-') return false;
+          
+          let recordDate = '';
+          const ts = d.timestamp.trim();
+          
+          // Konversi berbagai format tanggal dari Sheets ke standar YYYY-MM-DD
+          if (ts.match(/^\d{4}-\d{2}-\d{2}/)) {
+            // Sudah format standar YYYY-MM-DD (Contoh: 2026-07-31)
+            recordDate = ts.substring(0, 10);
+          } else if (ts.match(/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}/)) {
+            // Format Indo DD/MM/YYYY atau DD-MM-YYYY (Contoh: 31/07/2026)
+            const parts = ts.split(/[ T]/)[0].split(/[\/\-]/);
+            let part1 = parseInt(parts[0]); // DD atau MM
+            let part2 = parseInt(parts[1]); // MM atau DD
+            let year = parts[2];
+            
+            if (part1 > 12) { // Pasti DD/MM/YYYY
+              recordDate = `${year}-${part2.toString().padStart(2,'0')}-${part1.toString().padStart(2,'0')}`;
+            } else if (part2 > 12) { // Pasti MM/DD/YYYY
+              recordDate = `${year}-${part1.toString().padStart(2,'0')}-${part2.toString().padStart(2,'0')}`;
+            } else { // Default asumsikan format Indonesia DD/MM/YYYY
+              recordDate = `${year}-${part2.toString().padStart(2,'0')}-${part1.toString().padStart(2,'0')}`;
+            }
+          } else {
+            // Fallback, coba konversi via objek Date bawaan Javascript
+            const t = new Date(ts);
+            if (!isNaN(t.getTime())) {
+              recordDate = `${t.getFullYear()}-${(t.getMonth()+1).toString().padStart(2,'0')}-${t.getDate().toString().padStart(2,'0')}`;
+            } else {
+              recordDate = ts.split(/[ T]/)[0]; // Menyerah, potong seadanya
+            }
+          }
           
           let isValid = true;
+          // Karena format sekarang sama-sama YYYY-MM-DD, komparasi matematika akan berjalan akurat
           if (tanggalMulai && recordDate < tanggalMulai) isValid = false;
           if (tanggalAkhir && recordDate > tanggalAkhir) isValid = false;
           
