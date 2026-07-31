@@ -307,34 +307,61 @@
 
     <section id="content-sheets" class="hidden space-y-4">
       <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-3 border-b border-slate-100">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center"><i class="fa-solid fa-table"></i></div>
-            <div>
-              <h3 class="text-sm font-bold text-slate-800">Tabel Live Google Spreadsheet</h3>
+        <div class="flex flex-col mb-4 pb-3 border-b border-slate-100 gap-4">
+          <div class="flex justify-between items-center w-full">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center"><i class="fa-solid fa-table"></i></div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-800">Tabel Live Google Spreadsheet & Riwayat</h3>
+              </div>
             </div>
-          </div>
-          <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-            <select id="filter-sheet-kelas" onchange="renderSpreadsheetTable()" class="text-xs border border-slate-300 rounded-lg px-3 py-1.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full sm:w-auto flex-grow font-medium">
-              <option value="semua">Semua Kelas</option>
-            </select>
-            <button onclick="fetchLiveDataFromSpreadsheet(true)" class="bg-blue-600 hover:bg-blue-700 transition-colors text-white text-xs px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 w-full sm:w-auto">
-               <i class="fa-solid fa-sync"></i> Refresh Data API
+            <button onclick="fetchLiveDataFromSpreadsheet(true)" class="bg-blue-600 hover:bg-blue-700 transition-colors text-white text-xs px-3 py-1.5 rounded-lg flex items-center justify-center gap-1">
+               <i class="fa-solid fa-sync"></i> <span class="hidden sm:inline">Refresh Data API</span>
             </button>
           </div>
+
+          <div class="flex flex-wrap items-end gap-3 w-full bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <!-- Filter Tanggal Mulai -->
+            <div class="flex flex-col flex-1 min-w-[140px]">
+              <label for="filter-sheet-mulai" class="text-[10px] text-slate-500 font-semibold mb-1 uppercase tracking-wider">Mulai Tanggal</label>
+              <input type="date" id="filter-sheet-mulai" onchange="renderSpreadsheetTable()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full" title="Tanggal Mulai">
+            </div>
+            
+            <!-- Filter Tanggal Akhir -->
+            <div class="flex flex-col flex-1 min-w-[140px]">
+               <label for="filter-sheet-akhir" class="text-[10px] text-slate-500 font-semibold mb-1 uppercase tracking-wider">Sampai Tanggal</label>
+               <input type="date" id="filter-sheet-akhir" onchange="renderSpreadsheetTable()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full" title="Tanggal Akhir">
+            </div>
+
+            <div class="flex flex-col flex-1 min-w-[180px]">
+              <label for="filter-sheet-kelas" class="text-[10px] text-slate-500 font-semibold mb-1 uppercase tracking-wider">Filter Kelas</label>
+              <select id="filter-sheet-kelas" onchange="renderSpreadsheetTable()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full font-medium">
+                <option value="semua">Semua Kelas</option>
+              </select>
+            </div>
+            
+            <div class="flex flex-col justify-end">
+                <button onclick="resetSheetFilter()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-lg text-xs font-medium transition-colors h-[34px] flex items-center">
+                    Reset Filter
+                </button>
+            </div>
+          </div>
         </div>
+
         <div class="overflow-x-auto rounded-lg border border-slate-200">
-          <table class="w-full text-left border-collapse text-xs font-mono">
+          <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="bg-emerald-700 text-white">
-                <th class="p-2.5 border-r border-emerald-600 w-12 text-center">No</th>
-                <th class="p-2.5 border-r border-emerald-600">Nama Murid</th>
-                <th class="p-2.5 border-r border-emerald-600">Kelas</th>
-                <th class="p-2.5 border-r border-emerald-600">Status</th>
-                <th class="p-2.5">Keterangan</th>
+              <tr class="bg-emerald-700 text-white" id="sheet-table-header">
+                <th class="p-2.5 border-r border-emerald-600 w-10 text-center">No</th>
+                <th class="p-2.5 border-r border-emerald-600 min-w-[150px]">Nama Murid</th>
+                <th class="p-2.5 border-r border-emerald-600 min-w-[100px]">Kelas</th>
+                <!-- Kolom dinamis tanggal riwayat akan disisipkan di sini oleh JS -->
+                <th class="p-2.5 min-w-[150px]">Status Terbaru (Keterangan)</th>
               </tr>
             </thead>
-            <tbody id="sheet-table-body" class="divide-y divide-slate-200 bg-white"></tbody>
+            <tbody id="sheet-table-body" class="divide-y divide-slate-200 bg-white">
+                <!-- Isi tabel akan dirender oleh JS -->
+            </tbody>
           </table>
         </div>
       </div>
@@ -866,35 +893,184 @@
       setTimeout(() => b.classList.add('hidden'), 5000);
     }
 
-    function renderSpreadsheetTable() {
-      const filterDropdown = document.getElementById('filter-sheet-kelas');
-      const selectedKelas = filterDropdown ? filterDropdown.value : 'semua';
-      
-      const filteredData = presensiData.filter(d => 
-        selectedKelas === 'semua' || d.kelas === selectedKelas
-      );
+    function resetSheetFilter() {
+      document.getElementById('filter-sheet-mulai').value = '';
+      document.getElementById('filter-sheet-akhir').value = '';
+      document.getElementById('filter-sheet-kelas').value = 'semua';
+      renderSpreadsheetTable();
+    }
 
-      if (filteredData.length === 0) {
-        document.getElementById('sheet-table-body').innerHTML = `<tr><td colspan="5" class="p-6 text-center text-xs text-slate-500 italic">Tidak ada data presensi.</td></tr>`;
+    function formatTglStandar(ts) {
+        if (!ts || ts === '-') return '';
+        let recordDate = '';
+        ts = ts.trim();
+        
+        if (ts.match(/^\d{4}-\d{2}-\d{2}/)) {
+            recordDate = ts.substring(0, 10);
+        } else if (ts.match(/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}/)) {
+            const parts = ts.split(/[ T]/)[0].split(/[\/\-]/);
+            let p1 = parseInt(parts[0]), p2 = parseInt(parts[1]), yr = parts[2];
+            if (p1 > 12) recordDate = `${yr}-${p2.toString().padStart(2,'0')}-${p1.toString().padStart(2,'0')}`;
+            else if (p2 > 12) recordDate = `${yr}-${p1.toString().padStart(2,'0')}-${p2.toString().padStart(2,'0')}`;
+            else recordDate = `${yr}-${p2.toString().padStart(2,'0')}-${p1.toString().padStart(2,'0')}`; 
+        } else {
+            const t = new Date(ts);
+            if (!isNaN(t.getTime())) recordDate = `${t.getFullYear()}-${(t.getMonth()+1).toString().padStart(2,'0')}-${t.getDate().toString().padStart(2,'0')}`;
+            else recordDate = ts.split(/[ T]/)[0];
+        }
+        return recordDate;
+    }
+
+    function renderSpreadsheetTable() {
+      const filterKelas = document.getElementById('filter-sheet-kelas') ? document.getElementById('filter-sheet-kelas').value : 'semua';
+      const filterMulai = document.getElementById('filter-sheet-mulai') ? document.getElementById('filter-sheet-mulai').value : '';
+      const filterAkhir = document.getElementById('filter-sheet-akhir') ? document.getElementById('filter-sheet-akhir').value : '';
+      
+      const tableHeader = document.getElementById('sheet-table-header');
+      const tableBody = document.getElementById('sheet-table-body');
+
+      // 1. Ekstrak Tanggal Unik & Sortir Terlama -> Terbaru untuk Kolom Riwayat
+      let semuaTanggalSet = new Set();
+      presensiData.forEach(d => {
+         const tglStandar = formatTglStandar(d.timestamp);
+         if(tglStandar) semuaTanggalSet.add(tglStandar);
+      });
+      
+      // Ambil 5 tanggal terakhir yang ada di data (atau sesuai filter jika ada)
+      let tanggalUnikArray = Array.from(semuaTanggalSet).sort();
+      
+      // Terapkan filter tanggal jika diisi
+      if(filterMulai) tanggalUnikArray = tanggalUnikArray.filter(t => t >= filterMulai);
+      if(filterAkhir) tanggalUnikArray = tanggalUnikArray.filter(t => t <= filterAkhir);
+
+      // Ambil MAKSIMAL 5 HARI TERAKHIR dari range yang tersisa
+      const tanggalUntukHeader = tanggalUnikArray.slice(-5);
+
+      // 2. Susun Header Tabel Secara Dinamis
+      let headerHTML = `
+        <th class="p-2.5 border-r border-emerald-600 w-10 text-center font-semibold">No</th>
+        <th class="p-2.5 border-r border-emerald-600 min-w-[150px] font-semibold">Nama Murid</th>
+        <th class="p-2.5 border-r border-emerald-600 min-w-[100px] font-semibold">Kelas</th>
+      `;
+      
+      tanggalUntukHeader.forEach(tgl => {
+          // Format tgl untuk display "DD/MM"
+          const dObj = new Date(tgl);
+          let displayTgl = tgl;
+          if(!isNaN(dObj.getTime())) {
+              displayTgl = `${dObj.getDate().toString().padStart(2,'0')}/${(dObj.getMonth()+1).toString().padStart(2,'0')}`;
+          }
+          headerHTML += `<th class="p-2.5 border-r border-emerald-600 text-center whitespace-nowrap text-[10px] uppercase font-bold tracking-wider" title="${tgl}">${displayTgl}</th>`;
+      });
+
+      headerHTML += `<th class="p-2.5 min-w-[150px] font-semibold">Status Terbaru (Ket)</th>`;
+      tableHeader.innerHTML = headerHTML;
+
+      // 3. Susun Data Murid & Riwayat (Grouping berdasarkan Nama & Kelas)
+      // Gunakan fullDataSiswa (atau masterSiswa) sebagai referensi daftar murid jika kelas difilter
+      let daftarMurid = [];
+      if (filterKelas !== 'semua' && masterSiswa[filterKelas]) {
+         masterSiswa[filterKelas].forEach(nama => daftarMurid.push({nama: nama, kelas: filterKelas}));
+      } else {
+         // Jika 'semua', bangun dari fullDataSiswa atau set dari presensiData
+         if(fullDataSiswa && fullDataSiswa.length > 0) {
+             fullDataSiswa.forEach(s => daftarMurid.push({nama: s.Nama || s.nama, kelas: s.Kelas || s.kelas}));
+         } else {
+             // Fallback bangun dari unik presensiData jika master data kosong
+             const muridSet = new Set();
+             presensiData.forEach(d => {
+                 const key = `${d.nama}|${d.kelas}`;
+                 if(!muridSet.has(key)) {
+                     muridSet.add(key);
+                     daftarMurid.push({nama: d.nama, kelas: d.kelas});
+                 }
+             });
+         }
+      }
+
+      // Filter ulang daftar murid jika user memilih kelas tertentu
+      if (filterKelas !== 'semua') {
+         daftarMurid = daftarMurid.filter(m => m.kelas === filterKelas);
+      }
+      
+      // Urutkan abjad
+      daftarMurid.sort((a,b) => a.nama.localeCompare(b.nama));
+
+      if (daftarMurid.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="${4 + tanggalUntukHeader.length}" class="p-6 text-center text-xs text-slate-500 italic">Tidak ada data murid/presensi untuk filter tersebut.</td></tr>`;
         return;
       }
 
-      document.getElementById('sheet-table-body').innerHTML = filteredData.map((d, i) => {
-        let statusColor = "text-slate-700";
-        if(d.status === 'Hadir') statusColor = "text-emerald-600";
-        else if(d.status === 'Izin') statusColor = "text-amber-500";
-        else if(d.status === 'Sakit') statusColor = "text-sky-500";
-        else if(d.status === 'Alpa') statusColor = "text-rose-600";
+      // 4. Bangun Baris Tabel
+      let tbodyHTML = '';
+      daftarMurid.forEach((murid, idx) => {
+         // Ambil semua presensi untuk anak ini
+         const riwayatAnak = presensiData.filter(d => d.nama === murid.nama && d.kelas === murid.kelas);
+         
+         // Mapping riwayat berdasarkan tanggal standar
+         const riwayatMap = {};
+         let statusTerbaruObj = null;
+         let tglTerbaru = '';
 
-        return `
-        <tr class="${i%2===0?'bg-white':'bg-slate-50'} hover:bg-slate-100 transition-colors">
-          <td class="p-2.5 text-center border-r border-slate-100">${i + 1}</td>
-          <td class="p-2.5 border-r border-slate-100 font-semibold text-slate-700">${d.nama}</td>
-          <td class="p-2.5 border-r border-slate-100">${d.kelas}</td>
-          <td class="p-2.5 border-r border-slate-100 font-bold ${statusColor}">${d.status}</td>
-          <td class="p-2.5 text-slate-600">${d.catatan}</td>
-        </tr>
-      `}).join('');
+         riwayatAnak.forEach(r => {
+             const tglStd = formatTglStandar(r.timestamp);
+             if(tglStd) {
+                 // Jika anak presensi > 1 kali sehari, ambil yang terakhir
+                 if(!riwayatMap[tglStd] || r.timestamp > riwayatMap[tglStd].timestamp) {
+                     riwayatMap[tglStd] = r;
+                 }
+                 // Track status paling update di semua record anak ini (tidak peduli filter tanggal)
+                 if(!tglTerbaru || tglStd > tglTerbaru) {
+                     tglTerbaru = tglStd;
+                     statusTerbaruObj = r;
+                 }
+             }
+         });
+
+         let rowHTML = `
+            <tr class="${idx%2===0?'bg-white':'bg-slate-50'} hover:bg-slate-100 transition-colors">
+              <td class="p-2.5 text-center border-r border-slate-100 font-mono">${idx + 1}</td>
+              <td class="p-2.5 border-r border-slate-100 font-semibold text-slate-700 whitespace-nowrap">${murid.nama}</td>
+              <td class="p-2.5 border-r border-slate-100 text-[11px]">${murid.kelas}</td>
+         `;
+
+         // Sisipkan sel riwayat per tanggal header
+         tanggalUntukHeader.forEach(tgl => {
+             const rek = riwayatMap[tgl];
+             if(rek) {
+                 let sIcon = '', sColor = '';
+                 if(rek.status === 'Hadir') { sIcon = '<i class="fa-solid fa-check"></i>'; sColor = 'text-emerald-500 bg-emerald-50'; }
+                 else if(rek.status === 'Izin') { sIcon = 'I'; sColor = 'text-amber-500 bg-amber-50 font-bold'; }
+                 else if(rek.status === 'Sakit') { sIcon = 'S'; sColor = 'text-sky-500 bg-sky-50 font-bold'; }
+                 else { sIcon = 'A'; sColor = 'text-rose-500 bg-rose-50 font-bold'; }
+                 
+                 rowHTML += `<td class="p-2 border-r border-slate-100 text-center" title="${rek.status}">
+                                <div class="w-6 h-6 mx-auto rounded-md flex items-center justify-center text-[11px] ${sColor}">${sIcon}</div>
+                             </td>`;
+             } else {
+                 rowHTML += `<td class="p-2 border-r border-slate-100 text-center"><span class="text-slate-300">-</span></td>`;
+             }
+         });
+
+         // Status Terbaru
+         if(statusTerbaruObj) {
+             let statusColor = "text-slate-700";
+             if(statusTerbaruObj.status === 'Hadir') statusColor = "text-emerald-600";
+             else if(statusTerbaruObj.status === 'Izin') statusColor = "text-amber-500";
+             else if(statusTerbaruObj.status === 'Sakit') statusColor = "text-sky-500";
+             else if(statusTerbaruObj.status === 'Alpa') statusColor = "text-rose-600";
+             
+             const ket = statusTerbaruObj.catatan && statusTerbaruObj.catatan !== '-' ? ` <span class="text-slate-400 font-normal">(${statusTerbaruObj.catatan})</span>` : '';
+             rowHTML += `<td class="p-2.5 text-xs font-bold ${statusColor}">${statusTerbaruObj.status}${ket}</td>`;
+         } else {
+             rowHTML += `<td class="p-2.5 text-xs text-slate-400 italic">Belum ada data</td>`;
+         }
+
+         rowHTML += `</tr>`;
+         tbodyHTML += rowHTML;
+      });
+
+      tableBody.innerHTML = tbodyHTML;
     }
 
     function updateDashboard() {
