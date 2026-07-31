@@ -314,11 +314,8 @@
   <script>
     let GOOGLE_SCRIPT_URL = localStorage.getItem('presensi_gas_url') || "";
 
-    const masterSiswa = {
-      "XII IPA 1": ["Ahmad Fauzi", "Siti Rahmawati", "Fikri Haikal"],
-      "XII IPA 2": ["Budi Santoso"],
-      "XII IPS 1": ["Dian Permata"]
-    };
+    // UBAH: Jadikan variabel 'let' dan kosongkan awalnya, data akan diisi dari Spreadsheet
+    let masterSiswa = {};
 
     let presensiData = [];
     let weeklyChartInstance = null, distributionChartInstance = null;
@@ -380,27 +377,52 @@
 
       try {
         const response = await fetch(GOOGLE_SCRIPT_URL);
-        const data = await response.json();
+        const result = await response.json();
         
-        if (data.status === "success" && Array.isArray(data.data)) {
-          presensiData = data.data.map((row, index) => ({
-            id: index + 1,
-            timestamp: row.Timestamp || row.timestamp || '-',
-            nama: row.Nama || row.nama || '-',
-            kelas: row.Kelas || row.kelas || '-',
-            status: row.Status || row.status || 'Hadir',
-            catatan: row.Catatan || row.catatan || '-'
-          }));
-          if(forceRefresh) alert("Data berhasil disinkronkan dari Google Sheet!");
+        if (result.status === "success") {
+          // 1. Parse Data Presensi
+          if (Array.isArray(result.data)) {
+            presensiData = result.data.map((row, index) => ({
+              id: index + 1,
+              timestamp: row.Timestamp || row.timestamp || '-',
+              nama: row.Nama || row.nama || '-',
+              kelas: row.Kelas || row.kelas || '-',
+              status: row.Status || row.status || 'Hadir',
+              catatan: row.Catatan || row.catatan || '-'
+            }));
+          }
+          
+          // 2. Parse Data Master Siswa dari Sheet DataSiswa
+          if (result.masterSiswa && Object.keys(result.masterSiswa).length > 0) {
+            masterSiswa = result.masterSiswa;
+            updateDropdownKelasDinamis(); // Update UI dropdown kelas otomatis
+          }
+
+          if(forceRefresh) showAlert('success', 'Sinkronisasi Berhasil', 'Data terbaru berhasil diambil dari Spreadsheet.');
         }
       } catch (err) {
         console.error('Error GET:', err);
-        if(forceRefresh) alert('Gagal mengambil data dari Google Sheet. Pastikan URL benar.');
+        if(forceRefresh) showAlert('danger', 'Gagal Sinkron', 'Gagal mengambil data dari Google Sheet. Pastikan URL benar.');
       } finally {
         if (icon) icon.classList.remove('animate-spin');
         updateDashboard();
         renderSpreadsheetTable();
       }
+    }
+
+    // Fungsi Baru: Memperbarui semua dropdown kelas berdasarkan data masterSiswa terbaru
+    function updateDropdownKelasDinamis() {
+      const kelasList = Object.keys(masterSiswa).sort();
+      
+      const filterOptions = `<option value="semua">Semua Kelas</option>` + 
+                            kelasList.map(k => `<option value="${k}">${k}</option>`).join('');
+      
+      const inputOptions = `<option value="">-- Pilih Kelas --</option>` + 
+                           kelasList.map(k => `<option value="${k}">${k}</option>`).join('');
+
+      document.getElementById('filter-kelas').innerHTML = filterOptions;
+      document.getElementById('filter-sheet-kelas').innerHTML = filterOptions;
+      document.getElementById('input-kelas').innerHTML = inputOptions;
     }
 
     // --- INTEGRASI POST (Menyimpan Data) ---
