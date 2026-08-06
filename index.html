@@ -41,7 +41,7 @@
             <i class="fa-solid fa-file-excel text-xl"></i>
           </div>
           <div>
-            <h1 class="text-lg font-bold text-slate-900 leading-tight">PresensiMurid.id</h1>
+            <h1 class="text-lg font-bold text-slate-900 leading-tight">Presensi MPLS</h1>
             <p class="text-xs text-slate-500 flex items-center gap-1">
               <span id="api-status-dot" class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
               <span id="api-status-text">Terintegrasi Google Spreadsheet</span>
@@ -70,7 +70,7 @@
       </label>
       <div class="relative w-full sm:w-80">
         <select id="select-navigation-tab" onchange="switchTab(this.value)" class="w-full text-xs font-semibold bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white cursor-pointer shadow-sm">
-          <option value="dashboard">📊 Dashboard Rekap Mingguan</option>
+          <option value="dashboard">📊 Dashboard </option>
           <option value="presensi">📝 Form Presensi Murid</option>
           <option value="biodata">👨‍👩‍👧‍👦 Biodata Murid & Data Orang Tua</option>
           <option value="sheets">📋 Tabel Live Spreadsheet</option>
@@ -117,7 +117,7 @@
 
       <!-- Grafik Batang 5 Hari Terakhir -->
       <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm w-full">
-        <h3 class="text-sm font-bold text-slate-800 mb-4 text-center sm:text-left">Grafik Kehadiran 5 Hari Terakhir</h3>
+        <h3 class="text-sm font-bold text-slate-800 mb-4 text-center sm:text-left">Grafik Kehadiran Mingguan</h3>
         <div class="relative h-64 w-full">
           <canvas id="barChart5Hari"></canvas>
         </div>
@@ -130,7 +130,7 @@
         <!-- Tabel Rekap 5 Hari Terakhir -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-sm font-bold text-slate-800">Rekap 5 Hari Terakhir</h3>
+            <h3 class="text-sm font-bold text-slate-800">Rekap Mingguan</h3>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
